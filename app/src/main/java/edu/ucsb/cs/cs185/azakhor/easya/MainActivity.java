@@ -1,12 +1,8 @@
 package edu.ucsb.cs.cs185.azakhor.easya;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        if (ContextCompat.checkSelfPermission(this,
+      /*  if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
 
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     55);
 
-        }
+        }*/
 
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv);
@@ -51,9 +50,14 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        List<String> arrayList = new ArrayList<String>();
+        arrayList.add("bobby");
+        arrayList.add("billy");
 
-        String myDataset[] = {"bobby"};
-        mAdapter = new edu.ucsb.cs.cs185.azakhor.easya.RecyclerAdapter(myDataset);
+
+        String myDataset[];
+        myDataset = arrayList.toArray(new String[arrayList.size()]);
+        mAdapter = new RecyclerAdapter(myDataset);
         mRecyclerView.setAdapter(mAdapter);
 
 

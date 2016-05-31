@@ -2,6 +2,7 @@ package edu.ucsb.cs.cs185.azakhor.easya;
 
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                                                          int viewType) {
         // create a new view
         View v;
-        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_main, parent, false);
+        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cards, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
         ViewHolder vh = new ViewHolder(v);
@@ -89,10 +90,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         TextView termBox = (TextView)holder.mView.findViewById(R.id.termBox);
 
+        Log.d("Recycler", mDataset[position]);
 
 
-
-        termBox.setText("Spring 2016");
+        termBox.setText(mDataset[position]);
 
         //trailLocationTextView.setText(currentTrail.getLocation());
 //        final File fileofpic= new File(currentTrail.getImageURL());
