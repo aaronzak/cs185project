@@ -1,16 +1,20 @@
 package edu.ucsb.cs.cs185.azakhor.easya;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +25,16 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    List<String> arrayList = new ArrayList<String>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
 
 
 
@@ -45,20 +53,52 @@ public class MainActivity extends AppCompatActivity {
         }*/
 
 
+        File dir = new File(Environment.getExternalStorageDirectory() + "/EasyA");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        File allMyTerms= new File(Environment.getExternalStorageDirectory() + "/EasyA");
+        if(allMyTerms.isDirectory()){
+            Log.d("cameraroll", "dir");
+
+            for(File file: allMyTerms.listFiles())
+            {
+                arrayList.add(file.getName());
+            }
+        }
+
+
         mRecyclerView = (RecyclerView) findViewById(R.id.rv);
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        List<String> arrayList = new ArrayList<String>();
-        arrayList.add("bobby");
-        arrayList.add("billy");
+
+
 
 
         String myDataset[];
         myDataset = arrayList.toArray(new String[arrayList.size()]);
         mAdapter = new RecyclerAdapter(myDataset);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(mRecyclerView.getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                       // UserTrailRun trailNametoPass = myDataset[position];
+
+                        Log.d("Click recycler", "onClick bob stats " + position + " clicked");
+
+                        Intent intent = new Intent(view.getContext(), ClassActivity.class);
+                        //intent.putExtra("passTrailHist", trailNametoPass.getTrailName());
+
+
+
+                        view.getContext().startActivity(intent);
+                    }
+                })
+        );
 
 
 
@@ -88,6 +128,9 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, CreateTerm.class);
+           // intent.putExtra("trailImageURL", myUrlset[position]);
+            this.startActivity(intent);
             return true;
         }
 
