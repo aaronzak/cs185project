@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.ucsb.cs.cs185.azakhor.easya">
 
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -23,10 +22,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".CreateTerm" />
-
         <activity android:name=".ClassActivity" />
+        <activity android:name=".CreateClass" />
+        <activity
+            android:name=".classActivity2"
+            android:label="@string/title_activity_class2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ClassNavActivity"
+            android:label="@string/title_activity_class_nav"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".FilesNavActivity"
+            android:label="@string/title_activity_files_nav"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

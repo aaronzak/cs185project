@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">EasyA</string>
     <string name="action_settings">New Term</string>
+    <string name="title_activity_class2">classActivity2</string>
+    <string name="title_activity_class_nav">ClassNavActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_files_nav">FilesNavActivity</string>
 </resources>

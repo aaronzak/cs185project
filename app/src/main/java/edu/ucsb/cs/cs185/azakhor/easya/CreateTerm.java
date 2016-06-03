@@ -1,6 +1,5 @@
 package edu.ucsb.cs.cs185.azakhor.easya;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.Snackbar;
@@ -28,7 +27,7 @@ public class CreateTerm extends FragmentActivity {
         addNewTermButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText enterTermName = (EditText)findViewById(R.id.enterTermName);
+                EditText enterTermName = (EditText) findViewById(R.id.enterTermName);
 
                 String newTermString = enterTermName.getText().toString();
 
@@ -37,15 +36,20 @@ public class CreateTerm extends FragmentActivity {
                 File dir = new File(Environment.getExternalStorageDirectory() + "/EasyA/" + newTermString);
                 if (!dir.exists()) {
                     dir.mkdirs();
-                    Intent intent = new Intent(v.getContext(),MainActivity.class);
-                    startActivity(intent);
-                }
-                else {
+                    finish();
+                } else {
                     Snackbar.make(v, "This name is already in use, please enter another", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
 
 
+            }
+        });
+        Button cancelNewTerm = (Button)findViewById(R.id.cancelNewTerm);
+        cancelNewTerm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 

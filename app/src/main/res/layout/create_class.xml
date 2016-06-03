@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Please enter your new class"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal"
+        android:textSize="36dp"
+
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:hint="e.g. Spring 2016"
+        android:id="@+id/enterClassName"
+
+        />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/chooseTerm"
+        android:entries="@array/teams"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:text="Add New Class"
+        android:id="@+id/confirmNewTerm"
+        android:layout_weight="0.06"
+        android:layout_marginBottom="48dp"
+        android:background="#42a342"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:text="Cancel"
+        android:id="@+id/cancelNewClass"
+        android:layout_weight="0.14" />
+
 
 </LinearLayout>
