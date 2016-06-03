@@ -48,7 +48,7 @@ public class FilesNavActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-        File allMyFiles= new File(Environment.getExternalStorageDirectory() + "/EasyA/"+ currentClassFolder);
+        File allMyFiles= new File(Environment.getExternalStorageDirectory() + "/EasyA/"+ currentTermFolder + "/" + currentClassFolder);
         if(allMyFiles.isDirectory()){
             Log.d("cameraroll", "dir");
 
