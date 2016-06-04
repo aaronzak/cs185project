@@ -112,12 +112,12 @@ public class MainActivity extends AppCompatActivity
                         final AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
 
 
-                        alertDialog.setMessage("Are you sure you want to delete this file?");
+                        alertDialog.setMessage("Would you like to delete or rename this folder?");
 
 
 
 
-                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Delete", new DialogInterface.OnClickListener() {
 
                             String currentTermFolder = myDataset[myPos];
 
@@ -136,6 +136,14 @@ public class MainActivity extends AppCompatActivity
 
                             }
                         });
+                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Rename", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+
+
+                                    }
+                                });
 
                         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
 

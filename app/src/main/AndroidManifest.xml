@@ -25,6 +25,7 @@
         <activity android:name=".CreateTerm" />
         <activity android:name=".ClassActivity" />
         <activity android:name=".CreateClass" />
+        <activity android:name=".NotePad" />
         <activity
             android:name=".classActivity2"
             android:label="@string/title_activity_class2"

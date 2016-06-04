@@ -19,8 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class FilesNavActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -30,6 +32,7 @@ public class FilesNavActivity extends AppCompatActivity
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     List<String> arrayList = new ArrayList<String>();
+    String myFolder;
 
 
     @Override
@@ -48,17 +51,20 @@ public class FilesNavActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-        File allMyFiles= new File(Environment.getExternalStorageDirectory() + "/EasyA/"+ currentTermFolder + "/" + currentClassFolder);
+        final File allMyFiles= new File(Environment.getExternalStorageDirectory() + "/EasyA/"+ currentTermFolder + "/" + currentClassFolder);
         if(allMyFiles.isDirectory()){
-            Log.d("cameraroll", "dir");
+            Log.d("cameraroll File", allMyFiles.toString());
 
             for(File file: allMyFiles.listFiles())
             {
                 arrayList.add(file.getName());
+                Log.d("fileNav",file.getName());
             }
         }
 
-        arrayList.add("yo");
+        myFolder = allMyFiles.getAbsolutePath();
+
+
 
 
         final String myDataset[];
@@ -77,9 +83,17 @@ public class FilesNavActivity extends AppCompatActivity
                         Log.d("Click recycler", myFile);
 
 //Todo change intent to open
-                        Intent intent = new Intent(view.getContext(), FilesNavActivity.class);
-                        intent.putExtra("getFolder", myFile);
+                        Intent intent = new Intent(view.getContext(), NotePad.class);
+                        intent.putExtra("openingNew", 155);
+                        try {
 
+                            String content = new Scanner(new File(myFolder + "/" + myFile)).useDelimiter("\\Z").next();
+                            intent.putExtra("getNoteContent", content);
+
+                        }
+                        catch (IOException ex){
+
+                        }
 
                         view.getContext().startActivity(intent);
                     }
@@ -183,6 +197,10 @@ public class FilesNavActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, NotePad.class);
+            // intent.putExtra("trailImageURL", myUrlset[position]);
+
+            this.startActivity(intent);
             return true;
         }
 
