@@ -5,7 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="#ffffff"
     tools:context="edu.ucsb.cs.cs185.azakhor.easya.MainActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Naviage the menu at the top left to add your current quarter"
+        android:textSize="100dp"
+        android:id="@+id/noFoldersText"
+
+        />
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,12 +31,15 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        android:id="@+id/rv"
+        android:id="@+id/rv66"
         android:layout_marginTop="24dp"
+
+
         />
 
 

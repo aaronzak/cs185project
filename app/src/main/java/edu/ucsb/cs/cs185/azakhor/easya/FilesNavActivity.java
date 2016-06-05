@@ -16,6 +16,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,15 +36,24 @@ public class FilesNavActivity extends AppCompatActivity
     String myFolder;
 
 
+    public final static String FILENAME_KEY = "edu.ucsb.cs.cs185.azakhor.easya.filename";
+    public final static String TERM_KEY = "edu.ucsb.cs.cs185.azakhor.easya.term";
+    public final static String CLASS_KEY = "edu.ucsb.cs.cs185.azakhor.easya.class";
+    String currentClassFolder;
+      String currentTermFolder;
+    Boolean noFiles;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_files_nav);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        noFiles= true;
 
-        final String currentClassFolder = getIntent().getStringExtra("getFolder");
-      final  String currentTermFolder = getIntent().getStringExtra("getTerm");
+        currentClassFolder  = getIntent().getStringExtra("getFolder");
+         currentTermFolder = getIntent().getStringExtra("getTerm");
         getSupportActionBar().setTitle(currentClassFolder);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv2);
@@ -58,7 +69,7 @@ public class FilesNavActivity extends AppCompatActivity
             for(File file: allMyFiles.listFiles())
             {
                 arrayList.add(file.getName());
-                Log.d("fileNav",file.getName());
+                noFiles = false;
             }
         }
 
@@ -66,7 +77,10 @@ public class FilesNavActivity extends AppCompatActivity
 
 
 
-
+if(noFiles){
+    TextView noFilesText = (TextView)findViewById(R.id.noFilesText);
+    noFilesText.setVisibility(View.VISIBLE);
+}
         final String myDataset[];
         arrayList.add(0," ");//the first recycler is hidden behind the appbar so this does not show
 
@@ -75,25 +89,32 @@ public class FilesNavActivity extends AppCompatActivity
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(mRecyclerView.getContext(), mRecyclerView,new RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener(mRecyclerView.getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         // UserTrailRun trailNametoPass = myDataset[position];
                         String myFile = myDataset[position];
 
 
-                        Log.d("Click recycler", myFile);
+                        Log.d("Click recycler", currentTermFolder + currentClassFolder + myFile);
 
 //Todo change intent to open
-                        Intent intent = new Intent(view.getContext(), NotePad.class);
-                        intent.putExtra("openingNew", 155);
+                        Intent intent = new Intent(view.getContext(), TextFileActivity.class);
+                        //TODO: Fill in Strings below appropriately with the selected text file
+                        intent.putExtra(FILENAME_KEY, myFile);
+                        intent.putExtra(TERM_KEY, currentTermFolder);
+                        intent.putExtra(CLASS_KEY, currentClassFolder);
+                        startActivity(intent);
+
+
+
+
                         try {
 
                             String content = new Scanner(new File(myFolder + "/" + myFile)).useDelimiter("\\Z").next();
                             intent.putExtra("getNoteContent", content);
 
-                        }
-                        catch (IOException ex){
+                        } catch (IOException ex) {
 
                         }
 
@@ -102,14 +123,12 @@ public class FilesNavActivity extends AppCompatActivity
 
 
                     @Override
-                    public void onItemLongClick(View v, final int myPos){
+                    public void onItemLongClick(View v, final int myPos) {
 
                         final AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
 
 
                         alertDialog.setMessage("Are you sure you want to delete this file?");
-
-
 
 
                         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
@@ -121,10 +140,11 @@ public class FilesNavActivity extends AppCompatActivity
 
 
                                 File allMyClasses = new File(FilesNavActivity.this.getExternalFilesDir(null) + "/EasyA/" + currentTermFolder + "/" + currentClassFolder + "/" + myFileDelete);
-                                if (allMyClasses.isDirectory()) {
+                                if (allMyClasses.exists()) {
                                     allMyClasses.delete();
 
                                 }
+                                else Log.d("Delete file", allMyClasses.getAbsolutePath());
 
 
                                 mAdapter.notifyDataSetChanged();
@@ -135,7 +155,6 @@ public class FilesNavActivity extends AppCompatActivity
                         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Rename", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
 
 
                             }
@@ -151,15 +170,15 @@ public class FilesNavActivity extends AppCompatActivity
                         });
 
 
-
-
                         alertDialog.show();
-
 
 
                     }
                 })
         );
+
+        Button newTextFileButton = (Button)findViewById(R.id.addNewText);
+
 
 
 
@@ -199,9 +218,20 @@ public class FilesNavActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
 
+        if (id == R.id.addNewText) {
+
+            Intent intent = new Intent(this, TextFileActivity.class);
+            //Send NOTHING through the intent
+            intent.putExtra(FILENAME_KEY, "");
+            intent.putExtra(TERM_KEY, "");
+            intent.putExtra(CLASS_KEY, "");
+            startActivity(intent);
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

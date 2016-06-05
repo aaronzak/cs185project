@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateTerm" />
+        <activity android:name=".TextFileActivity" />
         <activity android:name=".ClassActivity" />
         <activity android:name=".CreateClass" />
         <activity android:name=".NotePad" />

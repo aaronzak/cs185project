@@ -13,6 +13,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="\n Click an icon on the top right to add notes or pictures"
+        android:textSize="80dp"
+        android:id="@+id/noFilesText"
+        android:visibility="gone"
+
+        />
+
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"

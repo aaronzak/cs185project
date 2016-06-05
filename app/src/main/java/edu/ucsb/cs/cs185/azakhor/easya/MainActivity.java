@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -130,6 +131,8 @@ public class MainActivity extends AppCompatActivity
 
 
         if(noFolders){
+            TextView noFoldersText = (TextView)findViewById(R.id.noFoldersText);
+            noFoldersText.setVisibility(View.VISIBLE);
 
         }
 

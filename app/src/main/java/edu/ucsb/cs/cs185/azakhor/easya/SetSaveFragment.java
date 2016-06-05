@@ -1,0 +1,116 @@
+package edu.ucsb.cs.cs185.azakhor.easya;
+
+import java.io.File;
+import java.util.ArrayList;
+
+
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import java.io.File;
+import java.util.ArrayList;
+
+/**
+ * Created by RICK on 6/4/2016.
+ */
+public class SetSaveFragment extends DialogFragment {
+
+    private OnSaveListener listener;
+    private ArrayList<String> mQuarterArray;
+    private ArrayList<String> mClassArray;
+
+    //Listener interface
+    public interface OnSaveListener{
+        void onSave(String quarter, String classname);
+    }
+
+    public void setSaveListener(OnSaveListener listener){
+        this.listener = listener;
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle bundle){
+        //Create a build
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        //Inflate layout
+        View contentView = getActivity().getLayoutInflater().inflate(R.layout.save_frag_layout, null);
+
+        //Get spinner of quarter
+        final Spinner quarterChosen = (Spinner) contentView.findViewById(R.id.quarterSpinner);
+        //Get spinner of class
+        final Spinner classChosen = (Spinner) contentView.findViewById(R.id.classSpinner);
+
+        //Fill mQuarterArray with all quarter directory names
+        mQuarterArray = new ArrayList<String>();
+        File allMyTerms = new File(getActivity().getExternalFilesDir(null) + "/EasyA");
+        if(allMyTerms.isDirectory()){
+            for(File file : allMyTerms.listFiles()){
+                mQuarterArray.add(file.getName());
+                Log.d("ALL_TERMS", "Terms: "+file.getName()); //TODO: Remove Log.d after testing
+            }
+        }
+
+        //Populate quarter spinner with choices from mQuarterArray
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, mQuarterArray);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        quarterChosen.setAdapter(spinnerArrayAdapter);
+
+        //Set listener when item is selected in the quarter spinner
+        quarterChosen.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Get all class spinner items based on item selected in quarter spinner
+                String term = parent.getItemAtPosition(position).toString();
+                mClassArray = new ArrayList<String>();
+                File allMyClasses = new File(getActivity().getExternalFilesDir(null) + "/EasyA/" + term);
+                if(allMyClasses.isDirectory()){
+                    for(File file : allMyClasses.listFiles()){
+                        mClassArray.add(file.getName());
+                        Log.d("ALL_CLASSES","Classes: "+file.getName()); //TODO: Remove Log.d after testing
+                    }
+                }
+
+                //Populate class spinner with choices from mClassArray
+                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, mClassArray);
+                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                classChosen.setAdapter(spinnerArrayAdapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //Empty
+            }
+        });
+
+        //Pass data to builder
+        builder.setView(contentView).setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String quarterSelect = (String) quarterChosen.getSelectedItem();
+                String classSelect = (String) classChosen.getSelectedItem();
+                if(quarterSelect == null){
+                    quarterSelect = "";
+                }
+                if(classSelect == null){
+                    classSelect = "";
+                }
+                Log.d("SPINNER","Spinner selections: "+quarterSelect+"|"+classSelect);
+                listener.onSave(quarterSelect, classSelect);
+            }
+        });
+
+        builder.setView(contentView).setNegativeButton("Cancel", null);
+
+        //Build and return dialog
+        return builder.create();
+    }
+}
