@@ -2,8 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/addNewClass"
+        android:id="@+id/addNewText"
         android:orderInCategory="100"
-        android:title="Add New Class"
-        app:showAsAction="never" />
+        android:title="addNewText"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_library_books_white"/>
+    <item
+        android:id="@+id/addNewImage"
+        android:orderInCategory="100"
+        android:title="addNewPhoto"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_photo_library_white"/>
 </menu>

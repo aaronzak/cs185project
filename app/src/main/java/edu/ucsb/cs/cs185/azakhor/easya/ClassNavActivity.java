@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -43,6 +42,7 @@ public class ClassNavActivity extends AppCompatActivity
 
 
          currentTermFolder = getIntent().getStringExtra("getFolder");
+        getSupportActionBar().setTitle(currentTermFolder);
 //        TextView myTextView = (TextView)findViewById(R.id.textView2);
 //        myTextView.setText(currentTermFolder);
 
@@ -60,7 +60,8 @@ public class ClassNavActivity extends AppCompatActivity
 
 
 
-        File allMyClasses= new File(Environment.getExternalStorageDirectory() + "/EasyA/"+ currentTermFolder);
+        File allMyClasses= new File(this.getExternalFilesDir(null) + "/EasyA/"+ currentTermFolder);
+        Log.d("currentTermFolder" , allMyClasses.getAbsolutePath());
         if(allMyClasses.isDirectory()){
             Log.d("cameraroll", "dir");
 
@@ -73,6 +74,8 @@ public class ClassNavActivity extends AppCompatActivity
 
 
         final String myDataset[];
+        arrayList.add(0," ");//the first recycler is hidden behind the appbar so this does not show
+
         myDataset = arrayList.toArray(new String[arrayList.size()]);
         mAdapter = new RecyclerAdapter(myDataset);
         mAdapter.notifyDataSetChanged();
@@ -112,20 +115,21 @@ public class ClassNavActivity extends AppCompatActivity
                             String myClassFolder = myDataset[myPos];
 
 
-
-
-
                             public void onClick(DialogInterface dialog, int id) {
 
 
-                                File myClasses= new File(Environment.getExternalStorageDirectory() + "/EasyA/"+ currentTermFolder + "/" + myClassFolder);
+                                File myClasses = new File(ClassNavActivity.this.getExternalFilesDir(null) + "/EasyA/" + currentTermFolder + "/" + myClassFolder);
                                 deleteDirectory(myClasses);
-
-
 
 
                                 mAdapter.notifyDataSetChanged();
 
+
+                            }
+                        });
+                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Rename", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
 
 
@@ -210,14 +214,7 @@ public class ClassNavActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.addNewClass) {
-            Intent intent = new Intent(this, CreateClass.class);
-            // intent.putExtra("trailImageURL", myUrlset[position]);
-            intent.putExtra("getCurrentClass",currentTermFolder);
 
-            this.startActivity(intent);
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -228,18 +225,13 @@ public class ClassNavActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.addNewClass) {
+            Intent intent = new Intent(this, CreateClass.class);
+            // intent.putExtra("trailImageURL", myUrlset[position]);
+            intent.putExtra("getCurrentClass",currentTermFolder);
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            this.startActivity(intent);
+            return true;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

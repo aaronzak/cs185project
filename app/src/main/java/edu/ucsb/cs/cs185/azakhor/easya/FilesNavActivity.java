@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -44,6 +43,7 @@ public class FilesNavActivity extends AppCompatActivity
 
         final String currentClassFolder = getIntent().getStringExtra("getFolder");
       final  String currentTermFolder = getIntent().getStringExtra("getTerm");
+        getSupportActionBar().setTitle(currentClassFolder);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv2);
 
@@ -51,7 +51,7 @@ public class FilesNavActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-        final File allMyFiles= new File(Environment.getExternalStorageDirectory() + "/EasyA/"+ currentTermFolder + "/" + currentClassFolder);
+        final File allMyFiles= new File(this.getExternalFilesDir(null) + "/EasyA/"+ currentTermFolder + "/" + currentClassFolder);
         if(allMyFiles.isDirectory()){
             Log.d("cameraroll File", allMyFiles.toString());
 
@@ -68,6 +68,8 @@ public class FilesNavActivity extends AppCompatActivity
 
 
         final String myDataset[];
+        arrayList.add(0," ");//the first recycler is hidden behind the appbar so this does not show
+
         myDataset = arrayList.toArray(new String[arrayList.size()]);
         mAdapter = new RecyclerAdapter(myDataset);
         mRecyclerView.setAdapter(mAdapter);
@@ -115,24 +117,24 @@ public class FilesNavActivity extends AppCompatActivity
                             String myFileDelete = myDataset[myPos];
 
 
-
-
-
                             public void onClick(DialogInterface dialog, int id) {
 
 
-                                File allMyClasses= new File(Environment.getExternalStorageDirectory() + "/EasyA/" + currentTermFolder + "/" + currentClassFolder + "/" + myFileDelete);
-                                if(allMyClasses.isDirectory()){
+                                File allMyClasses = new File(FilesNavActivity.this.getExternalFilesDir(null) + "/EasyA/" + currentTermFolder + "/" + currentClassFolder + "/" + myFileDelete);
+                                if (allMyClasses.isDirectory()) {
                                     allMyClasses.delete();
 
                                 }
 
 
-
-
-
                                 mAdapter.notifyDataSetChanged();
 
+
+                            }
+                        });
+                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Rename", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
 
 
@@ -196,13 +198,7 @@ public class FilesNavActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, NotePad.class);
-            // intent.putExtra("trailImageURL", myUrlset[position]);
 
-            this.startActivity(intent);
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -213,18 +209,12 @@ public class FilesNavActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, NotePad.class);
+            // intent.putExtra("trailImageURL", myUrlset[position]);
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            this.startActivity(intent);
+            return true;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -1,11 +1,14 @@
 package edu.ucsb.cs.cs185.azakhor.easya;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -48,24 +51,88 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Boolean noFolders = true;
+
+
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setTitle("EasyA");
 
 
-        File dir = new File(Environment.getExternalStorageDirectory() + "/EasyA");
-        if (!dir.exists()) {
-            dir.mkdirs();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+
+
+            // Should we show an explanation?
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    55);
+
+           /* try {
+                Thread.sleep(5000);                 //1000 milliseconds is one second.
+
+            } catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }*/
+
+
+
+
+
+            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+            // app-defined int constant. The callback method gets the
+            // result of the request.
         }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
 
-        File allMyTerms= new File(Environment.getExternalStorageDirectory() + "/EasyA");
-        if(allMyTerms.isDirectory()){
-            Log.d("cameraroll", "dir");
 
-            for(File file: allMyTerms.listFiles())
-            {
-                arrayList.add(file.getName());
+
+            // Should we show an explanation?
+
+            File dir = new File(this.getExternalFilesDir(null) + "/EasyA");
+            if (!dir.exists()) {
+                dir.mkdirs();
             }
+
+
+            File allMyTerms= new File(this.getExternalFilesDir(null) + "/EasyA");
+            if(allMyTerms.isDirectory()){
+                int n = allMyTerms.listFiles().length;
+                Log.d("cameraroll"," " + n );
+
+
+                for(File file: allMyTerms.listFiles())
+                {
+                    Log.d("dirExists", file.getName());
+                    Log.d("dirExists", dir.getAbsolutePath());
+                    noFolders=false;
+                    arrayList.add(file.getName());
+                }
+            }
+           /* try {
+                Thread.sleep(5000);                 //1000 milliseconds is one second.
+
+            } catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }*/
+
+
+
+
+
+            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+            // app-defined int constant. The callback method gets the
+            // result of the request.
         }
+
+
+        if(noFolders){
+
+        }
+
 
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv);
@@ -78,6 +145,7 @@ public class MainActivity extends AppCompatActivity
 
 
         final String myDataset[];
+        arrayList.add(0," ");//the first recycler is hidden behind the appbar so this does not show
         myDataset = arrayList.toArray(new String[arrayList.size()]);
         mAdapter = new RecyclerAdapter(myDataset);
         mRecyclerView.setAdapter(mAdapter);
@@ -127,7 +195,7 @@ public class MainActivity extends AppCompatActivity
                                 Log.d("dialog to delete", currentTermFolder);
 
 
-                                File allMyClasses = new File(Environment.getExternalStorageDirectory() + "/EasyA/" + currentTermFolder );
+                                File allMyClasses = new File(MainActivity.this.getExternalFilesDir(null) + "/EasyA/" + currentTermFolder );
                                 deleteDirectory(allMyClasses);
 
 
@@ -220,12 +288,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, CreateTerm.class);
-            // intent.putExtra("trailImageURL", myUrlset[position]);
-            this.startActivity(intent);
-            return true;
-        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -236,18 +299,12 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.action_settings) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            Intent intent = new Intent(this, CreateTerm.class);
+            // intent.putExtra("trailImageURL", myUrlset[position]);
+            this.startActivity(intent);
+            return true;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

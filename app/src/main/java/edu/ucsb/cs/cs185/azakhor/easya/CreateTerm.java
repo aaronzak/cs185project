@@ -1,7 +1,6 @@
 package edu.ucsb.cs.cs185.azakhor.easya;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -33,7 +32,7 @@ public class CreateTerm extends FragmentActivity {
 
                 Log.d("Enter new term", newTermString);
 
-                File dir = new File(Environment.getExternalStorageDirectory() + "/EasyA/" + newTermString);
+                File dir = new File(CreateTerm.this.getExternalFilesDir(null) + "/EasyA/" + newTermString);
                 if (!dir.exists()) {
                     dir.mkdirs();
                     finish();

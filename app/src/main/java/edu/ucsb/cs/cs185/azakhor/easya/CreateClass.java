@@ -1,7 +1,6 @@
 package edu.ucsb.cs.cs185.azakhor.easya;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -32,7 +31,7 @@ public class CreateClass extends FragmentActivity {
         String myString = getIntent().getStringExtra("getCurrentClass");
 
         spinnerArray = new ArrayList<String>();
-        File allMyClasses= new File(Environment.getExternalStorageDirectory() + "/EasyA");
+        File allMyClasses= new File(this.getExternalFilesDir(null) + "/EasyA");
         if(allMyClasses.isDirectory()){
 
 
@@ -94,12 +93,13 @@ public class CreateClass extends FragmentActivity {
 
                 String myClassName = newClassName.getText().toString();
 
-                Log.d("Enter new term", myTermString);
 
 
 
-                File dir = new File(Environment.getExternalStorageDirectory() + "/EasyA/" + myTermString + "/" + myClassName);
+
+                File dir = new File(CreateClass.this.getExternalFilesDir(null) + "/EasyA/" + myTermString + "/" + myClassName);
                 if (!dir.exists()) {
+                    Log.d("Enter new term", dir.getAbsolutePath());
                     dir.mkdirs();
                     finish();
                 }
