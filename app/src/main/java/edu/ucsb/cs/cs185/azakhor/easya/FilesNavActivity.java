@@ -100,7 +100,7 @@ if(noFiles){
                     @Override
                     public void onItemClick(View view, int position) {
                         // UserTrailRun trailNametoPass = myDataset[position];
-                        String myFile = myDataset[position];
+                        String myFile = arrayList.get(position);
 
 
                         Log.d("Click recycler", currentTermFolder + currentClassFolder + myFile);
