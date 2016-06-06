@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -81,7 +82,6 @@ public class RecyclerAdapter2 extends RecyclerView.Adapter<RecyclerAdapter2.View
 
         // TextView test = (TextView) holder.mView.findViewById(R.id.test_text);
         // test.setText(mDataset[position]);
-        //TODO Beatrix use the trail names to access the database and get the trail location, starting coordinates, and imagestring
         String trailName = mDataset[position];
 
         // TrailDatabaseHelper db = new TrailDatabaseHelper(holder.mView.getContext());
@@ -91,11 +91,13 @@ public class RecyclerAdapter2 extends RecyclerView.Adapter<RecyclerAdapter2.View
 
 
         TextView termBox = (TextView)holder.mView.findViewById(R.id.termBox);
+        ImageView icon = (ImageView)holder.mView.findViewById(R.id.imageView);
 
         Log.d("Recycler", mDataset[position]);
 
 
         termBox.setText(mDataset[position]);
+        icon.setImageResource(R.drawable.ic_menu_camera);
 
         //trailLocationTextView.setText(currentTrail.getLocation());
 //        final File fileofpic= new File(currentTrail.getImageURL());

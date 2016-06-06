@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -95,7 +96,9 @@ public class RecyclerAdapter3 extends RecyclerView.Adapter<RecyclerAdapter3.View
         Log.d("Recycler", mDataset[position]);
 
 
+        ImageView icon = (ImageView)holder.mView.findViewById(R.id.imageView);
         termBox.setText(mDataset[position]);
+        icon.setImageResource(R.drawable.ic_menu_camera);
 
         //trailLocationTextView.setText(currentTrail.getLocation());
 //        final File fileofpic= new File(currentTrail.getImageURL());

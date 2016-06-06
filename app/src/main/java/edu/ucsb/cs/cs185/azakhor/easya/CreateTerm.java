@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
@@ -39,7 +40,6 @@ public class CreateTerm extends DialogFragment {
         //Inflate layout
         View contentView = getActivity().getLayoutInflater().inflate(R.layout.create_term, null);
         builder.setTitle("Add a New Quarter:");
-
 
         final EditText quarterField = (EditText) contentView.findViewById(R.id.enterTermName);
 
