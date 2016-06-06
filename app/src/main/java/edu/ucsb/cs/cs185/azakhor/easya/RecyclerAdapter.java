@@ -93,7 +93,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         Log.d("Recycler", mDataset[position]);
 
 
+
         termBox.setText(mDataset[position]);
+
+
 
         //trailLocationTextView.setText(currentTrail.getLocation());
 //        final File fileofpic= new File(currentTrail.getImageURL());

@@ -1,26 +1,21 @@
 package edu.ucsb.cs.cs185.azakhor.easya;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by AaronZak on 6/2/16.
  */
-public class CreateClass extends FragmentActivity {
+public class CreateClass extends DialogFragment {
 
 
-    List<String> allTermsforSpinner;
+    /*List<String> allTermsforSpinner;
     ArrayList<String> spinnerArray;
 
     @Override
@@ -120,7 +115,53 @@ public class CreateClass extends FragmentActivity {
             }
         });
 
+    }*/
+
+    private onCourseListener listener;
+
+    public interface onCourseListener{
+        void onCreateCourse(String quarterName, String courseName);
     }
+
+    public void setTermListener(onCourseListener listener){
+        this.listener = listener;
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle bundle) {
+        //Create a build
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        //Inflate layout
+        View contentView = getActivity().getLayoutInflater().inflate(R.layout.create_class, null);
+        builder.setTitle("Add a New Course:");
+
+
+        final EditText courseField = (EditText) contentView.findViewById(R.id.enterCourseName);
+
+        //Pass data to builder
+        builder.setView(contentView).setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String quarter = "Spring 2016";
+                String course = courseField.getText().toString();
+                if(course.length() < 1){
+                    course = "";
+                }
+                listener.onCreateCourse(quarter, course);
+
+                Intent intent = getActivity().getIntent();
+                getActivity().finish();
+                startActivity(intent);
+            }
+        });
+
+        builder.setView(contentView).setNegativeButton("Cancel", null);
+
+        //Build and return dialog
+        return builder.create();
+    }
+
 
 
 }

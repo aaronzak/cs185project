@@ -20,7 +20,8 @@
         android:id="@+id/quarterSpinner"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/quarterText"
-        android:layout_toEndOf="@+id/quarterText" />
+        android:layout_toEndOf="@+id/quarterText"
+        android:paddingBottom="48dp"/>
 
     <TextView
         android:layout_width="wrap_content"

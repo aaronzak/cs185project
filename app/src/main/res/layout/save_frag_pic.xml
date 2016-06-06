@@ -10,7 +10,7 @@
         android:text="@string/save_frag_term_text"
         android:id="@+id/quarterText"
         android:textSize="20sp"
-        android:layout_below="@+id/editText"
+        android:layout_alignTop="@+id/quarterSpinner"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/quarterSpinner"
-        android:layout_alignTop="@+id/quarterText"
+        android:layout_below="@+id/imageTitle"
         android:layout_toRightOf="@+id/quarterText"
         android:layout_toEndOf="@+id/quarterText" />
 
@@ -29,8 +29,8 @@
         android:id="@+id/classText"
         android:textSize="20sp"
         android:layout_below="@+id/quarterSpinner"
-        android:layout_toLeftOf="@+id/quarterSpinner"
-        android:layout_toStartOf="@+id/quarterSpinner" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -45,17 +45,17 @@
         android:layout_height="wrap_content"
         android:text="Enter Title : "
         android:id="@+id/textView2"
+        android:textSize="20sp"
+        android:singleLine="false"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:textSize="20sp"
-        android:singleLine="false" />
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/imageTitle"
-        android:layout_alignTop="@+id/textView2"
+        android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/textView2"
         android:layout_toEndOf="@+id/textView2" />
 </RelativeLayout>

@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public class ClassNavActivity extends AppCompatActivity
             for(File file: allMyClasses.listFiles())
             {
                 noClass = false;
-                arrayList.add(file.getName());
+                arrayList.add(0,file.getName());
             }
         }
 
@@ -121,7 +122,7 @@ public class ClassNavActivity extends AppCompatActivity
 
 
 
-                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Delete", new DialogInterface.OnClickListener() {
 
                             String myClassFolder = myDataset[myPos];
 
@@ -133,12 +134,13 @@ public class ClassNavActivity extends AppCompatActivity
                                 deleteDirectory(myClasses);
 
 
-                                String myDataset[];
-                                mAdapter.notifyDataSetChanged();
-                                arrayList.remove(myClassFolder);
-                                myDataset = arrayList.toArray(new String[arrayList.size()]);
-                                mAdapter = new RecyclerAdapter(myDataset);
-                                mRecyclerView.setAdapter(mAdapter);
+//                                String myDataset[];
+//                                mAdapter.notifyDataSetChanged();
+//                                arrayList.remove(myClassFolder);
+//                                myDataset = arrayList.toArray(new String[arrayList.size()]);
+//                                mAdapter = new RecyclerAdapter(myDataset);
+//                                mRecyclerView.setAdapter(mAdapter);
+                                recreate();
 
                             }
                         });
@@ -244,11 +246,30 @@ public class ClassNavActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.addNewClass) {
-            Intent intent = new Intent(this, CreateClass.class);
-            // intent.putExtra("trailImageURL", myUrlset[position]);
-            intent.putExtra("getCurrentClass",currentTermFolder);
 
-            this.startActivity(intent);
+            CreateClass createClass = new CreateClass();
+            createClass.setTermListener(new CreateClass.onCourseListener() {
+                @Override
+                public void onCreateCourse(String quarterName, String courseName) {
+
+                    File dir = new File(getExternalFilesDir(null) + "/EasyA/" + currentTermFolder + "/" + courseName);
+                    if (!dir.exists()) {
+                        Log.d("Enter new term", dir.getAbsolutePath());
+                        dir.mkdirs();
+                      //  finish();
+                    }
+                    else {
+                        Toast.makeText(ClassNavActivity.this, "This name is already in use, please enter another", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            createClass.show(getFragmentManager(),"create_class_click");
+
+            // Intent intent = new Intent(this, CreateClass.class);
+            // intent.putExtra("trailImageURL", myUrlset[position]);
+            //intent.putExtra("getCurrentClass",currentTermFolder);
+
+            //this.startActivity(intent);
             return true;
         }
 

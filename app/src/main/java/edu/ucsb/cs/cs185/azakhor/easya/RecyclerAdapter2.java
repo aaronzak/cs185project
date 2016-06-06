@@ -91,12 +91,13 @@ public class RecyclerAdapter2 extends RecyclerView.Adapter<RecyclerAdapter2.View
 
 
         TextView termBox = (TextView)holder.mView.findViewById(R.id.termBox);
-        ImageView icon = (ImageView)holder.mView.findViewById(R.id.imageView);
 
         Log.d("Recycler", mDataset[position]);
 
 
         termBox.setText(mDataset[position]);
+        ImageView icon = (ImageView)holder.mView.findViewById(R.id.imageView);
+
         icon.setImageResource(R.drawable.ic_menu_camera);
 
         //trailLocationTextView.setText(currentTrail.getLocation());

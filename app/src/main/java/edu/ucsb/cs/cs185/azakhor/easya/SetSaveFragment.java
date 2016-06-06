@@ -1,9 +1,5 @@
 package edu.ucsb.cs.cs185.azakhor.easya;
 
-import java.io.File;
-import java.util.ArrayList;
-
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -38,6 +34,11 @@ public class SetSaveFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle bundle){
+        Bundle directoryInfo = getArguments();
+        final String curTerm = directoryInfo.getString(TextFileActivity.TERM_SAVE_FRAGMENT_KEY);
+        final String curClass = directoryInfo.getString(TextFileActivity.CLASS_SAVE_FRAGMENT_KEY);
+        Log.d("Spinner info",curTerm+ "/" +curClass);
+
         //Create a build
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -63,6 +64,7 @@ public class SetSaveFragment extends DialogFragment {
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, mQuarterArray);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         quarterChosen.setAdapter(spinnerArrayAdapter);
+        quarterChosen.setSelection(spinnerArrayAdapter.getPosition(curTerm));
 
         //Set listener when item is selected in the quarter spinner
         quarterChosen.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -83,6 +85,7 @@ public class SetSaveFragment extends DialogFragment {
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, mClassArray);
                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 classChosen.setAdapter(spinnerArrayAdapter);
+                classChosen.setSelection(spinnerArrayAdapter.getPosition(curClass));
             }
 
             @Override

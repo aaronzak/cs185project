@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -111,15 +112,10 @@ public class MainActivity extends AppCompatActivity
                     Log.d("dirExists", file.getName());
                     Log.d("dirExists", dir.getAbsolutePath());
                     noFolders=false;
-                    arrayList.add(file.getName());
+                    arrayList.add(0,file.getName());
                 }
             }
-           /* try {
-                Thread.sleep(5000);                 //1000 milliseconds is one second.
 
-            } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }*/
 
 
 
@@ -203,24 +199,20 @@ public class MainActivity extends AppCompatActivity
                                 deleteDirectory(allMyClasses);
 
 
-                                String myDataset[];
-                                mAdapter.notifyDataSetChanged();
+                              /*  String myDataset[];
+
                                 arrayList.remove(currentTermFolder);
                                 myDataset = arrayList.toArray(new String[arrayList.size()]);
                                 mAdapter = new RecyclerAdapter(myDataset);
                                 mRecyclerView.setAdapter(mAdapter);
+                                mAdapter.notifyDataSetChanged();*/
+
+                                recreate();
 
 
                             }
                         });
-                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Rename", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
 
-
-
-                                    }
-                                });
 
                         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
 
@@ -245,7 +237,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_in_main);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -274,7 +266,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_in_main);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -312,6 +304,9 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+public void refresh(){
+    recreate();
+}
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -319,15 +314,41 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            // Log.d("TEST","Press action");
 
-            Intent intent = new Intent(this, CreateTerm.class);
-            // intent.putExtra("trailImageURL", myUrlset[position]);
-            this.startActivity(intent);
+            final CreateTerm createTerm = new CreateTerm();
+            createTerm.setTermListener(new CreateTerm.onTermListener() {
+                @Override
+                public void onCreateTerm(String quarterName) {
+                    File dir = new File(getExternalFilesDir(null) + "/EasyA/" + quarterName);
+                    if (!dir.exists()) {
+                        dir.mkdirs();
+                        getFragmentManager().beginTransaction().hide(createTerm);
+                       // refresh();
+
+//                        final String myDataset[];
+//                        arrayList.remove(0);
+//                        arrayList.add(0,quarterName);
+//                        arrayList.add(0," ");//the first recycler is hidden behind the appbar so this does not show
+//                        myDataset = arrayList.toArray(new String[arrayList.size()]);
+//                        mAdapter = new RecyclerAdapter(myDataset);
+//                        mAdapter.notifyDataSetChanged();
+//                        mRecyclerView.setAdapter(mAdapter);
+
+                    } else {
+                        Toast.makeText(MainActivity.this, "This name is already in use, please enter another", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            });
+            createTerm.show(getFragmentManager(), "create_term_click");
+            //recreate();
             return true;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_in_main);
+        // drawer.mDrawerLayout.closeDrawer(Gravity.END);
+        drawer.closeDrawer(GravityCompat.END);
         return true;
     }
 }

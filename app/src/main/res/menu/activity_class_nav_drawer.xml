@@ -3,13 +3,33 @@
 
 
 
-    <item android:title="Add">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/addNewClass"
+            android:orderInCategory="100"
+            android:title="Add New Class"
+            />
+
+    </group>
+
+
+
+    <item android:title="View">
+
         <menu>
             <item
-                android:id="@+id/addNewClass"
                 android:orderInCategory="100"
-                android:title="Add New Class"
-                 />        </menu>
+                android:title="Grid"
+                />
+            <item
+                android:orderInCategory="100"
+                android:title="List"
+                />
+        </menu>
     </item>
+
+
+
+
 
 </menu>

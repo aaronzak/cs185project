@@ -22,9 +22,13 @@ public class TextFileActivity extends AppCompatActivity {
 
     private EditText mTitleField;
     private EditText mTextField;
-    private String mQuarter;
-    private String mClass;
+    public String mQuarter;
+    public String mClass;
     private boolean isNewFile;
+
+
+    public final static String TERM_SAVE_FRAGMENT_KEY = "edu.ucsb.cs.cs185.azakhor.easya.save.fragment.term";
+    public final static String CLASS_SAVE_FRAGMENT_KEY = "edu.ucsb.cs.cs185.azakhor.easya.save.fragment.class";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,8 @@ public class TextFileActivity extends AppCompatActivity {
         String initTitle = (String) getIntent().getExtras().get(FilesNavActivity.FILENAME_KEY);
         mQuarter = (String) getIntent().getExtras().get(FilesNavActivity.TERM_KEY);
         mClass = (String) getIntent().getExtras().get(FilesNavActivity.CLASS_KEY);
+
+        Log.d("Spinner info1", mQuarter + "/" + mClass);
 
         if(initTitle.length() > 0 &&
                 mQuarter.length() > 0 &&
@@ -130,17 +136,26 @@ public class TextFileActivity extends AppCompatActivity {
      */
     private void saveTextDialog(){
         SetSaveFragment saveFragment = new SetSaveFragment();
+        //Store current term and class and pass it into the fragment
+//        Bundle directoryInfo = new Bundle();
+//        directoryInfo.putString(TERM_SAVE_FRAGMENT_KEY, mQuarter);
+//        directoryInfo.putString(CLASS_SAVE_FRAGMENT_KEY, mClass);
+//        saveFragment.setArguments(directoryInfo);
         saveFragment.setSaveListener(new SetSaveFragment.OnSaveListener() {
             @Override
             public void onSave(String quarter, String classname) {
-                if(quarter.length() > 0 && classname.length() > 0) {
+                if (quarter.length() > 0 && classname.length() > 0) {
                     saveText(quarter, classname);
-                }
-                else{
+                } else {
                     Toast.makeText(TextFileActivity.this, "Please specify a term and class", Toast.LENGTH_LONG).show();
                 }
             }
         });
+        Bundle directoryInfo = new Bundle();
+        directoryInfo.putString(TERM_SAVE_FRAGMENT_KEY, mQuarter);
+        directoryInfo.putString(CLASS_SAVE_FRAGMENT_KEY, mClass);
+        saveFragment.setArguments(directoryInfo);
+        Log.d("Spinner info1", mQuarter + "/" + mClass);
         saveFragment.show(getFragmentManager(), "save_click");
     }
 
@@ -213,11 +228,14 @@ public class TextFileActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(TextFileActivity.this, "File "+filename+" Overridden", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TextFileActivity.this, "File " + filename + " Overridden", Toast.LENGTH_SHORT).show();
 
                 }
             });
             overrideFragment.show(getFragmentManager(), "override_click");
+            //Intent intent = new Intent(this,FilesNavActivity.class);
+            //startActivity(intent);
+
         }
     }
 

@@ -11,6 +11,20 @@
 
     </group>
 
+    <item android:title="View">
+
+        <menu>
+            <item
+                android:orderInCategory="100"
+                android:title="Grid"
+                />
+            <item
+                android:orderInCategory="100"
+                android:title="List"
+                />
+        </menu>
+    </item>
+
 
 
 </menu>

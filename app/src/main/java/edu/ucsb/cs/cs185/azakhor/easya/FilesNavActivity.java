@@ -60,7 +60,7 @@ public class FilesNavActivity extends AppCompatActivity
 
         currentClassFolder  = getIntent().getStringExtra("getFolder");
          currentTermFolder = getIntent().getStringExtra("getTerm");
-        getSupportActionBar().setTitle(currentClassFolder);
+        getSupportActionBar().setTitle(currentTermFolder + "/" + currentClassFolder);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv2);
 
@@ -74,6 +74,7 @@ public class FilesNavActivity extends AppCompatActivity
 
             for(File file: allMyFiles.listFiles())
             {
+                Log.d("allMyFiles", file.getAbsolutePath());
                 arrayList.add(0,file.getName());
                 noFiles = false;
             }
@@ -91,7 +92,7 @@ if(noFiles){
         arrayList.add(0," ");//the first recycler is hidden behind the appbar so this does not show
 
         myDataset = arrayList.toArray(new String[arrayList.size()]);
-        mAdapter = new RecyclerAdapter(myDataset);
+        mAdapter = new RecyclerAdapter2(myDataset);
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addOnItemTouchListener(
@@ -128,7 +129,7 @@ if(noFiles){
                         alertDialog.setMessage("Are you sure you want to delete this file?");
 
 
-                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Delete", new DialogInterface.OnClickListener() {
 
                             String myFileDelete = myDataset[myPos];
 
@@ -144,12 +145,14 @@ if(noFiles){
                                 else Log.d("Delete file", allMyClasses.getAbsolutePath());
 
 
-                                String myDataset[];
-                                mAdapter.notifyDataSetChanged();
-                                arrayList.remove(myFileDelete);
-                                myDataset = arrayList.toArray(new String[arrayList.size()]);
-                                mAdapter = new RecyclerAdapter(myDataset);
-                                mRecyclerView.setAdapter(mAdapter);
+//                                String myDataset[];
+//                                mAdapter.notifyDataSetChanged();
+//                                arrayList.remove(myFileDelete);
+//                                myDataset = arrayList.toArray(new String[arrayList.size()]);
+//                                mAdapter = new RecyclerAdapter(myDataset);
+//                                mRecyclerView.setAdapter(mAdapter);
+
+                                recreate();
 
 
                             }
@@ -189,7 +192,7 @@ if(noFiles){
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed(){
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -197,6 +200,33 @@ if(noFiles){
             super.onBackPressed();
         }
     }
+
+  /*  @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("LOCATION", "Restarting");
+        final String myDataset[];
+        //arrayList.add(0," ");//the first recycler is hidden behind the appbar so this does not show
+
+        myDataset = arrayList.toArray(new String[arrayList.size()]);
+        mAdapter = new RecyclerAdapter(myDataset);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+    @Override
+     protected void onPostResume() {
+        super.onPostResume();
+        Log.d("LOCATION", "PostResuming");
+        final String myDataset[];
+        //arrayList.add(0," ");//the first recycler is hidden behind the appbar so this does not show
+
+        myDataset = arrayList.toArray(new String[arrayList.size()]);
+        mAdapter = new RecyclerAdapter(myDataset);
+        mRecyclerView.setAdapter(mAdapter);
+
+    }*/
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -219,9 +249,10 @@ if(noFiles){
             Intent intent = new Intent(this, TextFileActivity.class);
             //Send NOTHING through the intent
             intent.putExtra(FILENAME_KEY, "");
-            intent.putExtra(TERM_KEY, "");
-            intent.putExtra(CLASS_KEY, "");
+            intent.putExtra(TERM_KEY, currentTermFolder);
+            intent.putExtra(CLASS_KEY, currentClassFolder);
             startActivity(intent);
+
         }
         else if( id == R.id.addNewImage){
 
