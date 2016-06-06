@@ -23,7 +23,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -48,6 +47,7 @@ public class FilesNavActivity extends AppCompatActivity
     String currentClassFolder;
       String currentTermFolder;
     Boolean noFiles;
+    public static FilesNavActivity restarter;
 
 
     @Override
@@ -57,10 +57,11 @@ public class FilesNavActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         noFiles= true;
+        restarter=this;
 
         currentClassFolder  = getIntent().getStringExtra("getFolder");
          currentTermFolder = getIntent().getStringExtra("getTerm");
-        getSupportActionBar().setTitle(currentTermFolder + "/" + currentClassFolder);
+        getSupportActionBar().setTitle(currentTermFolder + " / " + currentClassFolder);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv2);
 
@@ -84,12 +85,9 @@ public class FilesNavActivity extends AppCompatActivity
 
 
 
-if(noFiles){
-    TextView noFilesText = (TextView)findViewById(R.id.noFilesText);
-    noFilesText.setVisibility(View.VISIBLE);
-}
+
         final String myDataset[];
-        arrayList.add(0," ");//the first recycler is hidden behind the appbar so this does not show
+        arrayList.add(0,"");//the first recycler is hidden behind the appbar so this does not show
 
         myDataset = arrayList.toArray(new String[arrayList.size()]);
         mAdapter = new RecyclerAdapter2(myDataset);
@@ -103,15 +101,30 @@ if(noFiles){
                         String myFile = arrayList.get(position);
 
 
-                        Log.d("Click recycler", currentTermFolder + currentClassFolder + myFile);
+                        if(!myFile.equals("")) {
 
 //Todo change intent to open
-                        Intent intent = new Intent(view.getContext(), TextFileActivity.class);
-                        //TODO: Fill in Strings below appropriately with the selected text file
-                        intent.putExtra(FILENAME_KEY, myFile);
-                        intent.putExtra(TERM_KEY, currentTermFolder);
-                        intent.putExtra(CLASS_KEY, currentClassFolder);
-                        startActivity(intent);
+                            if (myFile.length() > 0) {
+                                String ext = myFile.substring(myFile.length() - 4);
+                                Log.d("Click recycler", currentTermFolder + currentClassFolder + ext);
+                                if (ext.equals(".jpg")) {
+                                    Intent picIntent = new Intent(view.getContext(), ViewImage.class);
+                                    picIntent.putExtra("PicToShow", getExternalFilesDir(null) + "/EasyA/" + currentTermFolder + "/" + currentClassFolder + "/" + myFile);
+                                    startActivity(picIntent);
+
+                                } else {
+
+                                    Intent intent = new Intent(view.getContext(), TextFileActivity.class);
+                                    //TODO: Fill in Strings below appropriately with the selected text file
+                                    intent.putExtra(FILENAME_KEY, myFile);
+                                    intent.putExtra(TERM_KEY, currentTermFolder);
+                                    intent.putExtra(CLASS_KEY, currentClassFolder);
+                                    intent.putExtra("Activity", "file");
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+                        }
 
 
 
@@ -149,7 +162,7 @@ if(noFiles){
 //                                mAdapter.notifyDataSetChanged();
 //                                arrayList.remove(myFileDelete);
 //                                myDataset = arrayList.toArray(new String[arrayList.size()]);
-//                                mAdapter = new RecyclerAdapter(myDataset);
+//                                mAdapter = new RecyclerAdapter2(myDataset);
 //                                mRecyclerView.setAdapter(mAdapter);
 
                                 recreate();
@@ -201,17 +214,24 @@ if(noFiles){
         }
     }
 
-  /*  @Override
+
+
+
+
+    @Override
     protected void onRestart() {
         super.onRestart();
         Log.d("LOCATION", "Restarting");
-        final String myDataset[];
-        //arrayList.add(0," ");//the first recycler is hidden behind the appbar so this does not show
-
-        myDataset = arrayList.toArray(new String[arrayList.size()]);
-        mAdapter = new RecyclerAdapter(myDataset);
+        //                                String myDataset[];
+//                                mAdapter.notifyDataSetChanged();
+//                                arrayList.remove(myFileDelete);
+        final String[] myDataset = arrayList.toArray(new String[arrayList.size()]);
+        mAdapter = new RecyclerAdapter2(myDataset);
         mRecyclerView.setAdapter(mAdapter);
+        //recreate();
     }
+
+    /*
     @Override
      protected void onPostResume() {
         super.onPostResume();
@@ -251,12 +271,16 @@ if(noFiles){
             intent.putExtra(FILENAME_KEY, "");
             intent.putExtra(TERM_KEY, currentTermFolder);
             intent.putExtra(CLASS_KEY, currentClassFolder);
+            intent.putExtra("Activity", "file");
             startActivity(intent);
+            finish();
+            //startActivity(getIntent());
 
         }
         else if( id == R.id.addNewImage){
 
             dispatchTakePictureIntent();
+           // finish();
 
 
 
@@ -267,18 +291,10 @@ if(noFiles){
     }
 
 
-    private void dispatchTakePictureIntent() {
+    public void dispatchTakePictureIntent() {
 
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
 
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    55);
-
-        }
 
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
@@ -294,25 +310,84 @@ if(noFiles){
             // app-defined int constant. The callback method gets the
             // result of the request.
         }
+        else{
+            takePicture();
+        }
+        /*
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED) {
 
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            // Ensure that there's a camera activity to handle the intent
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                Log.d("cameraroll", "dispatch");
+                // Create the File where the photo should go
+
+                // savePictureDialog();
+
+                File storageDir = new File(this.getExternalFilesDir(null) + "/EasyApics");
+
+
+                if (!storageDir.exists()) {
+                    storageDir.mkdir();
+                }
+                Log.d("cameraroll", storageDir.getAbsolutePath());
+                File photoFile = new File(storageDir, "1");
+                */
+          /*  try {
+
+               // photoFile = createImageFile();
+                // TextView text = (TextView) findViewById(R.id.no_pho);
+                //text.setVisibility(View.GONE);
+                // listofPhotos.add(0, photoFile.getAbsolutePath());
+
+
+
+                Log.d("dispatch add",photoFile.getAbsolutePath());
+
+
+
+
+
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+
+            }*/
+        /*
+//            Log.d("cameraroll", photoFile.getAbsolutePath());
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                            Uri.fromFile(photoFile));
+                    startActivityForResult(takePictureIntent, 55);
+
+                    //arrayList.remove(0);
+                    //arrayList.add(0, photoFile.getAbsolutePath());
+                    //arrayList.add(0,"");
+
+
+                }
+            }*/
+        //}
+    }
+
+    private void takePicture(){
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             Log.d("cameraroll", "dispatch");
             // Create the File where the photo should go
 
-           // savePictureDialog();
+            // savePictureDialog();
 
             File storageDir = new File(this.getExternalFilesDir(null) + "/EasyApics");
-
-
 
 
             if (!storageDir.exists()) {
                 storageDir.mkdir();
             }
             Log.d("cameraroll", storageDir.getAbsolutePath());
-            File photoFile = new File(storageDir,"1");
+            File photoFile = new File(storageDir, "1");
           /*  try {
 
                // photoFile = createImageFile();
@@ -339,10 +414,9 @@ if(noFiles){
                         Uri.fromFile(photoFile));
                 startActivityForResult(takePictureIntent, 55);
 
-                arrayList.remove(0);
-                arrayList.add(0, photoFile.getAbsolutePath());
-                arrayList.add(0,"");
-
+                //arrayList.remove(0);
+                //arrayList.add(0, photoFile.getAbsolutePath());
+                //arrayList.add(0,"");
 
 
             }
@@ -355,14 +429,18 @@ if(noFiles){
         savePicFragment.setSavePicListener(new SetSavePicFragment.OnSavePicListener() {
             @Override
             public void onSavePic(String title, String quarter, String classname) {
-                if(title.length() > 0 && quarter.length() > 0 && classname.length() > 0) {
-                    savePicture(quarter, classname,title);
-                }
-                else{
+                if (title.length() > 0 && quarter.length() > 0 && classname.length() > 0) {
+                    savePicture(quarter, classname, title);
+
+                } else {
                     Toast.makeText(FilesNavActivity.this, "Please specify a title, term and class", Toast.LENGTH_LONG).show();
                 }
             }
         });
+        Bundle directoryInfo = new Bundle();
+        directoryInfo.putString(TERM_KEY, currentTermFolder);
+        directoryInfo.putString(CLASS_KEY, currentClassFolder);
+        savePicFragment.setArguments(directoryInfo);
         savePicFragment.show(getFragmentManager(), "save_pic_click");
     }
 
@@ -384,7 +462,7 @@ if(noFiles){
 
         File myPictureFiletoMove = new File(this.getExternalFilesDir(null) + "/EasyApics/1");
 
-        final String filename = title;
+        final String filename = title + ".jpg";
         final File file = new File(path, filename);
 
         if (!file.exists()) {
@@ -415,6 +493,9 @@ if(noFiles){
             overrideFragment.show(getFragmentManager(), "override_click");
         }
 
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
         return file.getAbsolutePath();
     }
 
@@ -467,5 +548,21 @@ if(noFiles){
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
+        switch(requestCode){
+            case 55 : {
+                if(grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    takePicture();
+                }
+                else{
+                 return;
+                }
+                break;
+            }
+        }
     }
 }

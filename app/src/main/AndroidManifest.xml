@@ -22,10 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateTerm" />
-        <activity android:name=".TextFileActivity" />
+        <activity android:name=".TextFileActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ClassActivity" />
-        <activity android:name=".CreateClass" />
+        <activity android:name=".ViewImage" />
         <activity android:name=".NotePad" />
         <activity
             android:name=".classActivity2"

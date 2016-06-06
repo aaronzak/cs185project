@@ -82,7 +82,7 @@ public class RecyclerAdapter2 extends RecyclerView.Adapter<RecyclerAdapter2.View
 
         // TextView test = (TextView) holder.mView.findViewById(R.id.test_text);
         // test.setText(mDataset[position]);
-        String trailName = mDataset[position];
+        String myFile = mDataset[position];
 
         // TrailDatabaseHelper db = new TrailDatabaseHelper(holder.mView.getContext());
         //  List<Trail> trails = db.getAllTrails();
@@ -98,7 +98,15 @@ public class RecyclerAdapter2 extends RecyclerView.Adapter<RecyclerAdapter2.View
         termBox.setText(mDataset[position]);
         ImageView icon = (ImageView)holder.mView.findViewById(R.id.imageView);
 
-        icon.setImageResource(R.drawable.ic_menu_camera);
+if(myFile.length()>3) {
+    String ext = myFile.substring(myFile.length() - 4);
+
+    if (ext.equals(".jpg")) icon.setImageResource(R.drawable.ic_insert_photo_black_24dp);
+    else {
+        icon.setImageResource(R.drawable.ic_insert_drive_file_black_24dp);
+    }
+
+}else Log.d("Recycler", myFile);
 
         //trailLocationTextView.setText(currentTrail.getLocation());
 //        final File fileofpic= new File(currentTrail.getImageURL());

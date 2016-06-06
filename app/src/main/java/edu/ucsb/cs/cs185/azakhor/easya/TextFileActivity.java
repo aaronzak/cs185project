@@ -1,5 +1,6 @@
 package edu.ucsb.cs.cs185.azakhor.easya;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -51,7 +52,7 @@ public class TextFileActivity extends AppCompatActivity {
                 mQuarter.length() > 0 &&
                 mClass.length() > 0){
             isNewFile = false;
-            mTitleField.setText(initTitle);
+            mTitleField.setText(initTitle.substring(0,initTitle.length()-4));
         }
         else{
             isNewFile = true;
@@ -74,6 +75,7 @@ public class TextFileActivity extends AppCompatActivity {
 
         //Read in a file.
         if(!isNewFile) {
+            Log.d("READ", "Reading a file from "+mQuarter+"/"+mClass+"/"+initTitle);
             readFile(initTitle);
         }
     }
@@ -122,6 +124,7 @@ public class TextFileActivity extends AppCompatActivity {
                 }
 
                 String contents = new String(bytes);
+                Log.d("TEXT", "Text: "+contents);
 
                 if(contents != null) {
                     mTextField.setText(contents);
@@ -146,6 +149,8 @@ public class TextFileActivity extends AppCompatActivity {
             public void onSave(String quarter, String classname) {
                 if (quarter.length() > 0 && classname.length() > 0) {
                     saveText(quarter, classname);
+
+
                 } else {
                     Toast.makeText(TextFileActivity.this, "Please specify a term and class", Toast.LENGTH_LONG).show();
                 }
@@ -163,6 +168,37 @@ public class TextFileActivity extends AppCompatActivity {
      *  Executed when pressing the Save button in the save dialog fragment.
      *  Reads all the text in the text field and saves it to the file.
      */
+
+
+    @Override
+    public void onBackPressed(){
+
+        if(getIntent().getStringExtra("Activity").equals("main")){
+            Log.d("onbackpress", getIntent().getStringExtra("Activity"));
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra("getFolder", "");
+            intent.putExtra("getTerm", "");
+            finish();
+            startActivity(intent);
+
+        }else if(getIntent().getStringExtra("Activity").equals("class")){
+            Log.d("startingClassActvity", getIntent().getStringExtra("Activity"));
+            Intent intent = new Intent(getApplicationContext(), ClassNavActivity.class);
+            intent.putExtra("getFolder", "");
+            intent.putExtra("getTerm", mQuarter);
+            finish();
+            startActivity(intent);
+        }else {
+            Log.d("onbackpressFil", getIntent().getStringExtra("Activity"));
+            Intent intent = new Intent(getApplicationContext(), FilesNavActivity.class);
+            intent.putExtra("getFolder", mClass);
+            intent.putExtra("getTerm", mQuarter);
+            finish();
+            startActivity(intent);
+        }
+
+    }
+
     private void saveText(String quarter, String classname) {
         Log.d("SAVING","Start saving text");
         final String title = mTitleField.getText().toString();     //Get title which will be the filename
@@ -182,7 +218,7 @@ public class TextFileActivity extends AppCompatActivity {
             filepath.mkdirs();
         }
 
-        final String filename = title;
+        final String filename = title + ".txt";
         final File file = new File(path, filename);
 
         if (!file.exists()) {

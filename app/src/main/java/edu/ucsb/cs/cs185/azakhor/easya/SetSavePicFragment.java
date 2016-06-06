@@ -35,6 +35,9 @@ public class SetSavePicFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle bundle){
+        Bundle directoryInfo = getArguments();
+        final String curTerm = directoryInfo.getString(FilesNavActivity.TERM_KEY);
+        final String curClass = directoryInfo.getString(FilesNavActivity.CLASS_KEY);
         //Create a build
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -62,6 +65,7 @@ public class SetSavePicFragment extends DialogFragment {
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, mQuarterArray);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         quarterChosen.setAdapter(spinnerArrayAdapter);
+        quarterChosen.setSelection(spinnerArrayAdapter.getPosition(curTerm));
 
         //Set listener when item is selected in the quarter spinner
         quarterChosen.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -82,6 +86,7 @@ public class SetSavePicFragment extends DialogFragment {
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, mClassArray);
                 spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 classChosen.setAdapter(spinnerArrayAdapter);
+                classChosen.setSelection(spinnerArrayAdapter.getPosition(curClass));
             }
 
             @Override
