@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ public class ClassNavActivity extends AppCompatActivity
                     @Override
                     public void onItemClick(View view, int position) {
                         // UserTrailRun trailNametoPass = myDataset[position];
-                        String myClassFolder = myDataset[position];
+                        String myClassFolder = arrayList.get(position);
 
 
                         Log.d("Click recycler", myClassFolder);
@@ -104,34 +105,19 @@ public class ClassNavActivity extends AppCompatActivity
 
                        final AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
 
-
                         alertDialog.setMessage("Are you sure you want to delete this file?");
 
-
-
-
                         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-
                             String myClassFolder = myDataset[myPos];
-
-
                             public void onClick(DialogInterface dialog, int id) {
-
-
                                 File myClasses = new File(ClassNavActivity.this.getExternalFilesDir(null) + "/EasyA/" + currentTermFolder + "/" + myClassFolder);
                                 deleteDirectory(myClasses);
-
-
                                 mAdapter.notifyDataSetChanged();
-
-
                             }
                         });
                         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Rename", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
-
 
                             }
                         });
@@ -139,28 +125,16 @@ public class ClassNavActivity extends AppCompatActivity
                         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int id) {
-
                                 alertDialog.hide();
-
                             }
                         });
 
-
-
-
                         alertDialog.show();
-
-
-
                     }
 
 
                 }
         ));
-
-
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -226,11 +200,40 @@ public class ClassNavActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.addNewClass) {
-            Intent intent = new Intent(this, CreateClass.class);
-            // intent.putExtra("trailImageURL", myUrlset[position]);
-            intent.putExtra("getCurrentClass",currentTermFolder);
 
-            this.startActivity(intent);
+            CreateClass createClass = new CreateClass();
+            createClass.setTermListener(new CreateClass.onCourseListener() {
+                @Override
+                public void onCreateCourse(final String courseName) {
+                    File dir = new File(getExternalFilesDir(null) + "/EasyA/" + currentTermFolder + "/" + courseName);
+                    if (!dir.exists()) {
+                        Log.d("Enter new term", dir.getAbsolutePath());
+                        dir.mkdirs();
+                    }
+                    else {
+                        Toast.makeText(ClassNavActivity.this, "This name is already in use, please enter another", Toast.LENGTH_LONG).show();
+                    }
+
+                    ClassNavActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final String myDataset[];
+                            arrayList.add(courseName);
+                            myDataset = arrayList.toArray(new String[arrayList.size()]);
+                            mAdapter = new RecyclerAdapter(myDataset);
+                            mRecyclerView.setAdapter(mAdapter);
+                            mRecyclerView.invalidate();
+                        }
+                    });
+                }
+            });
+            createClass.show(getFragmentManager(),"create_class_click");
+
+            // Intent intent = new Intent(this, CreateClass.class);
+            // intent.putExtra("trailImageURL", myUrlset[position]);
+            //intent.putExtra("getCurrentClass",currentTermFolder);
+
+            //this.startActivity(intent);
             return true;
         }
 

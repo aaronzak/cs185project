@@ -79,7 +79,7 @@ public class FilesNavActivity extends AppCompatActivity
                     @Override
                     public void onItemClick(View view, int position) {
                         // UserTrailRun trailNametoPass = myDataset[position];
-                        String myFile = myDataset[position];
+                        String myFile = arrayList.get(position);
 
 
                         Log.d("Click recycler", myFile);
@@ -112,7 +112,7 @@ public class FilesNavActivity extends AppCompatActivity
 
 
 
-                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Delete", new DialogInterface.OnClickListener() {
 
                             String myFileDelete = myDataset[myPos];
 

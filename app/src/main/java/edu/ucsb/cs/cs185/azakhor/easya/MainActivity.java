@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -17,9 +18,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,8 +30,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -38,12 +39,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-
         super.onResume();
-
         mAdapter.notifyDataSetChanged();
     }
-
 
 
     @Override
@@ -53,7 +51,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Boolean noFolders = true;
 
-
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setTitle("EasyA");
@@ -61,8 +58,6 @@ public class MainActivity extends AppCompatActivity
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-
-
 
             // Should we show an explanation?
 
@@ -77,18 +72,12 @@ public class MainActivity extends AppCompatActivity
                 Thread.currentThread().interrupt();
             }*/
 
-
-
-
-
             // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
             // app-defined int constant. The callback method gets the
             // result of the request.
         }
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
-
-
 
             // Should we show an explanation?
 
@@ -97,18 +86,16 @@ public class MainActivity extends AppCompatActivity
                 dir.mkdirs();
             }
 
-
-            File allMyTerms= new File(this.getExternalFilesDir(null) + "/EasyA");
-            if(allMyTerms.isDirectory()){
+            File allMyTerms = new File(this.getExternalFilesDir(null) + "/EasyA");
+            if (allMyTerms.isDirectory()) {
                 int n = allMyTerms.listFiles().length;
-                Log.d("cameraroll"," " + n );
+                Log.d("cameraroll", " " + n);
 
 
-                for(File file: allMyTerms.listFiles())
-                {
+                for (File file : allMyTerms.listFiles()) {
                     Log.d("dirExists", file.getName());
                     Log.d("dirExists", dir.getAbsolutePath());
-                    noFolders=false;
+                    noFolders = false;
                     arrayList.add(file.getName());
                 }
             }
@@ -120,19 +107,15 @@ public class MainActivity extends AppCompatActivity
             }*/
 
 
-
-
-
             // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
             // app-defined int constant. The callback method gets the
             // result of the request.
         }
 
 
-        if(noFolders){
+        if (noFolders) {
 
         }
-
 
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv);
@@ -141,11 +124,8 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-
-
-
         final String myDataset[];
-        arrayList.add(0," ");//the first recycler is hidden behind the appbar so this does not show
+        arrayList.add(0, " ");//the first recycler is hidden behind the appbar so this does not show
         myDataset = arrayList.toArray(new String[arrayList.size()]);
         mAdapter = new RecyclerAdapter(myDataset);
         mRecyclerView.setAdapter(mAdapter);
@@ -154,35 +134,30 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onItemClick(View view, int position) {
                         // UserTrailRun trailNametoPass = myDataset[position];
-                        String myTermFolder = myDataset[position];
+                        String myTermFolder = arrayList.get(position);
 
-                        Log.d("main"," click");
+                        Log.d("main", " click");
 
 
                         Log.d("Click recycler", myTermFolder);
-
 
 
                         Intent intent = new Intent(view.getContext(), ClassNavActivity.class);
                         intent.putExtra("getFolder", myTermFolder);
 
 
-
-
                         view.getContext().startActivity(intent);
                     }
 
                     @Override
-                    public void onItemLongClick(View v, final int myPos){
+                    public void onItemLongClick(View v, final int myPos) {
 
-                        Log.d("main","long click");
+                        Log.d("main", "long click");
 
                         final AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
 
 
                         alertDialog.setMessage("Would you like to delete or rename this folder?");
-
-
 
 
                         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Delete", new DialogInterface.OnClickListener() {
@@ -195,7 +170,7 @@ public class MainActivity extends AppCompatActivity
                                 Log.d("dialog to delete", currentTermFolder);
 
 
-                                File allMyClasses = new File(MainActivity.this.getExternalFilesDir(null) + "/EasyA/" + currentTermFolder );
+                                File allMyClasses = new File(MainActivity.this.getExternalFilesDir(null) + "/EasyA/" + currentTermFolder);
                                 deleteDirectory(allMyClasses);
 
 
@@ -205,13 +180,12 @@ public class MainActivity extends AppCompatActivity
                             }
                         });
                         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Rename", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
 
-
-                                    }
-                                });
+                            }
+                        });
 
                         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
 
@@ -223,17 +197,12 @@ public class MainActivity extends AppCompatActivity
                         });
 
 
-
-
                         alertDialog.show();
-
 
 
                     }
                 })
         );
-
-
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -247,20 +216,19 @@ public class MainActivity extends AppCompatActivity
     }
 
     public static boolean deleteDirectory(File directory) {
-        if(directory.exists()){
+        if (directory.exists()) {
             File[] files = directory.listFiles();
-            if(null!=files){
-                for(int i=0; i<files.length; i++) {
-                    if(files[i].isDirectory()) {
+            if (null != files) {
+                for (int i = 0; i < files.length; i++) {
+                    if (files[i].isDirectory()) {
                         deleteDirectory(files[i]);
-                    }
-                    else {
+                    } else {
                         files[i].delete();
                     }
                 }
             }
         }
-        return(directory.delete());
+        return (directory.delete());
     }
 
     @Override
@@ -300,15 +268,39 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            // Log.d("TEST","Press action");
 
-            Intent intent = new Intent(this, CreateTerm.class);
-            // intent.putExtra("trailImageURL", myUrlset[position]);
-            this.startActivity(intent);
+            CreateTerm createTerm = new CreateTerm();
+            createTerm.setTermListener(new CreateTerm.onTermListener() {
+                @Override
+                public void onCreateTerm(final String quarterName) {
+                    File dir = new File(getExternalFilesDir(null) + "/EasyA/" + quarterName);
+                    if (!dir.exists()) {
+                        dir.mkdirs();
+                    } else {
+                        Toast.makeText(MainActivity.this, "This name is already in use, please enter another", Toast.LENGTH_LONG).show();
+                    }
+
+                    MainActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final String myDataset[];
+                            arrayList.add(quarterName);
+                            myDataset = arrayList.toArray(new String[arrayList.size()]);
+                            mAdapter = new RecyclerAdapter(myDataset);
+                            mRecyclerView.setAdapter(mAdapter);
+                            mRecyclerView.invalidate();
+                        }
+                    });
+                }
+            });
+            createTerm.show(getFragmentManager(), "create_term_click");
             return true;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        // drawer.mDrawerLayout.closeDrawer(Gravity.END);
+        drawer.closeDrawer(GravityCompat.END);
         return true;
     }
 }
