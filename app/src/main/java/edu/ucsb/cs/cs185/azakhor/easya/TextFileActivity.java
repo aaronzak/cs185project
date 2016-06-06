@@ -1,10 +1,9 @@
 package edu.ucsb.cs.cs185.azakhor.easya;
 
-//TODO: Change the package name
-
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +31,7 @@ public class TextFileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_file);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+      //  setSupportActionBar(toolbar);
 
         mTitleField = (EditText) findViewById(R.id.title_editor);
         mTextField = (EditText) findViewById(R.id.text_editor);
@@ -118,8 +117,10 @@ public class TextFileActivity extends AppCompatActivity {
 
                 String contents = new String(bytes);
 
-                mTextField.setText(contents);
-                Toast.makeText(this, "File Loaded", Toast.LENGTH_SHORT).show();
+                if(contents != null) {
+                    mTextField.setText(contents);
+                }
+                Toast.makeText(this, "File "+name+" Loaded", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -148,8 +149,9 @@ public class TextFileActivity extends AppCompatActivity {
      *  Reads all the text in the text field and saves it to the file.
      */
     private void saveText(String quarter, String classname) {
-        String title = mTitleField.getText().toString();     //Get title which will be the filename
-        String text = mTextField.getText().toString();       //Get text that will be saved to the file
+        Log.d("SAVING","Start saving text");
+        final String title = mTitleField.getText().toString();     //Get title which will be the filename
+        final String text = mTextField.getText().toString();       //Get text that will be saved to the file
 
         //Check if title is not valid
         if(title.length() < 1){
@@ -165,8 +167,9 @@ public class TextFileActivity extends AppCompatActivity {
             filepath.mkdirs();
         }
 
-        String filename = title;
-        File file = new File(path, filename);
+        final String filename = title;
+        final File file = new File(path, filename);
+
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -185,11 +188,36 @@ public class TextFileActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Toast.makeText(this, "File Saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "File "+filename+" Saved", Toast.LENGTH_SHORT).show();
         } else {
-            //File already exists, display toast message to alert user to choose a different title
-            Toast.makeText(this, title + " already exists. Please choose another title name.", Toast.LENGTH_LONG).show();
-            return; //exit without saving
+            //Show override confirmation fragment asking for confirmation
+            SetOverrideFragment overrideFragment = new SetOverrideFragment();
+            overrideFragment.setOverrideListener(new SetOverrideFragment.onOverrideListener() {
+                @Override
+                public void onOverride() {
+                    //Override file
+                    try {
+                        file.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Write to file
+                    FileOutputStream stream = null;
+                    try {
+                        stream = new FileOutputStream(file);
+                        stream.write(text.getBytes());
+                        stream.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(TextFileActivity.this, "File "+filename+" Overridden", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+            overrideFragment.show(getFragmentManager(), "override_click");
         }
     }
 

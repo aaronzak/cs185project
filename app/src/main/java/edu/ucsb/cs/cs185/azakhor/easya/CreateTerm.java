@@ -1,5 +1,6 @@
 package edu.ucsb.cs.cs185.azakhor.easya;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
@@ -35,6 +36,8 @@ public class CreateTerm extends FragmentActivity {
                 File dir = new File(CreateTerm.this.getExternalFilesDir(null) + "/EasyA/" + newTermString);
                 if (!dir.exists()) {
                     dir.mkdirs();
+                    Intent intent = new Intent(v.getContext(),MainActivity.class);
+
                     finish();
                 } else {
                     Snackbar.make(v, "This name is already in use, please enter another", Snackbar.LENGTH_LONG)

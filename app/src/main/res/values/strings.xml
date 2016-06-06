@@ -15,6 +15,9 @@
     <string name="save_frag_class_text">Class :</string>
     <string name="action_save">Save</string>
 
+    <string name="override_message">File already exists. Do you want to override it?</string>
+
+
 
 </resources>
 

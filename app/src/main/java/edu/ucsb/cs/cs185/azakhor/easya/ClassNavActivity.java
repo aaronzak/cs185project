@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,13 +33,18 @@ public class ClassNavActivity extends AppCompatActivity
 
     String currentTermFolder;
 
+    Boolean noClass;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_class_nav);
+        Log.d("open Class", "shia");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        noClass = true;
 
 
          currentTermFolder = getIntent().getStringExtra("getFolder");
@@ -67,10 +73,15 @@ public class ClassNavActivity extends AppCompatActivity
 
             for(File file: allMyClasses.listFiles())
             {
+                noClass = false;
                 arrayList.add(file.getName());
             }
         }
 
+        if(noClass){
+            TextView noClassT = (TextView)findViewById(R.id.noClassText);
+            noClassT.setVisibility(View.VISIBLE);
+        }
 
 
         final String myDataset[];
@@ -105,7 +116,7 @@ public class ClassNavActivity extends AppCompatActivity
                        final AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
 
 
-                        alertDialog.setMessage("Are you sure you want to delete this file?");
+                        alertDialog.setMessage("Are you sure you want to delete this folder?");
 
 
 
@@ -122,19 +133,16 @@ public class ClassNavActivity extends AppCompatActivity
                                 deleteDirectory(myClasses);
 
 
+                                String myDataset[];
                                 mAdapter.notifyDataSetChanged();
-
-
-                            }
-                        });
-                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Rename", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-
+                                arrayList.remove(myClassFolder);
+                                myDataset = arrayList.toArray(new String[arrayList.size()]);
+                                mAdapter = new RecyclerAdapter(myDataset);
+                                mRecyclerView.setAdapter(mAdapter);
 
                             }
                         });
+
 
                         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
 
@@ -212,6 +220,16 @@ public class ClassNavActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        if (id == R.id.addNewText) {
+
+            Intent intent = new Intent(this, TextFileActivity.class);
+            //Send NOTHING through the intent
+            intent.putExtra(FilesNavActivity.FILENAME_KEY, "");
+            intent.putExtra(FilesNavActivity.TERM_KEY, "");
+            intent.putExtra(FilesNavActivity.CLASS_KEY, "");
+            startActivity(intent);
+        }
 
         //noinspection SimplifiableIfStatement
 

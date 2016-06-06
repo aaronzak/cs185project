@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
 
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    public RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     List<String> arrayList = new ArrayList<String>();
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
 
         mAdapter.notifyDataSetChanged();
+        Log.d("onResume", " new");
     }
 
 
@@ -202,7 +203,12 @@ public class MainActivity extends AppCompatActivity
                                 deleteDirectory(allMyClasses);
 
 
+                                String myDataset[];
                                 mAdapter.notifyDataSetChanged();
+                                arrayList.remove(currentTermFolder);
+                                myDataset = arrayList.toArray(new String[arrayList.size()]);
+                                mAdapter = new RecyclerAdapter(myDataset);
+                                mRecyclerView.setAdapter(mAdapter);
 
 
                             }
@@ -291,6 +297,16 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+
+        if (id == R.id.addNewText) {
+
+            Intent intent = new Intent(this, TextFileActivity.class);
+            //Send NOTHING through the intent
+            intent.putExtra(FilesNavActivity.FILENAME_KEY, "");
+            intent.putExtra(FilesNavActivity.TERM_KEY, "");
+            intent.putExtra(FilesNavActivity.CLASS_KEY, "");
+            startActivity(intent);
+        }
 
 
         return super.onOptionsItemSelected(item);
