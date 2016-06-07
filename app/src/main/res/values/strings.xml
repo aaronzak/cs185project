@@ -11,11 +11,11 @@
 
 
     <string name="title_default">Title</string>
-    <string name="save_frag_term_text">Term :</string>
-    <string name="save_frag_class_text">Class :</string>
+    <string name="save_frag_term_text">Quarter :</string>
+    <string name="save_frag_class_text">Course :</string>
     <string name="action_save">Save</string>
 
-    <string name="override_message">File already exists. Do you want to override it?</string>
+    <string name="override_message">File already exists. Do you want to overwrite it?</string>
 
 
 

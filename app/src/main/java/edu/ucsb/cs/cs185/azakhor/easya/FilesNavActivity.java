@@ -138,8 +138,7 @@ public class FilesNavActivity extends AppCompatActivity
 
                         final AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
 
-
-                        alertDialog.setMessage("Are you sure you want to delete this file?");
+                        alertDialog.setMessage("Are you sure you want to delete  " + myDataset[myPos] +  "?");
 
 
                         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Delete", new DialogInterface.OnClickListener() {
@@ -154,8 +153,7 @@ public class FilesNavActivity extends AppCompatActivity
                                 if (allMyClasses.exists()) {
                                     allMyClasses.delete();
 
-                                }
-                                else Log.d("Delete file", allMyClasses.getAbsolutePath());
+                                } else Log.d("Delete file", allMyClasses.getAbsolutePath());
 
 
 //                                String myDataset[];

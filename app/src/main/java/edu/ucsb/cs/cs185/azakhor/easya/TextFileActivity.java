@@ -41,10 +41,15 @@ public class TextFileActivity extends AppCompatActivity {
         mTitleField = (EditText) findViewById(R.id.title_editor);
         mTextField = (EditText) findViewById(R.id.text_editor);
 
+
+
+
         //TODO: Change MainActivity.<key> to wherever the key is stored
         String initTitle = (String) getIntent().getExtras().get(FilesNavActivity.FILENAME_KEY);
         mQuarter = (String) getIntent().getExtras().get(FilesNavActivity.TERM_KEY);
         mClass = (String) getIntent().getExtras().get(FilesNavActivity.CLASS_KEY);
+
+        getSupportActionBar().setTitle(mQuarter + " / " + mClass);
 
         Log.d("Spinner info1", mQuarter + "/" + mClass);
 
@@ -264,7 +269,7 @@ public class TextFileActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(TextFileActivity.this, "File " + filename + " Overridden", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TextFileActivity.this, "File " + filename + " Overritten", Toast.LENGTH_SHORT).show();
 
                 }
             });

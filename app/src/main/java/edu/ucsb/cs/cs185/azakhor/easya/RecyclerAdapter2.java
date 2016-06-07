@@ -94,8 +94,11 @@ public class RecyclerAdapter2 extends RecyclerView.Adapter<RecyclerAdapter2.View
 
         Log.d("Recycler", mDataset[position]);
 
+if(myFile.length()>3) {
+    String showText = myFile.substring(0,myFile.length()-4);
+    termBox.setText(showText);
 
-        termBox.setText(mDataset[position]);
+}
         ImageView icon = (ImageView)holder.mView.findViewById(R.id.imageView);
 
 if(myFile.length()>3) {

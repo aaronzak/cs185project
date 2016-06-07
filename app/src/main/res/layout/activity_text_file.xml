@@ -27,7 +27,7 @@
                 android:inputType="textCapWords"
                 android:imeOptions="actionDone"
                 android:textSize="20sp"
-                android:text="@string/title_default" />
+                android:hint="@string/title_default" />
 
         </android.support.v7.widget.Toolbar>
 

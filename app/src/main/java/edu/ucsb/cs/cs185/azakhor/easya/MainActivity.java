@@ -173,14 +173,12 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onItemLongClick(View v, final int myPos){
 
-                        Log.d("main","long click");
+                        Log.d("main", "long click");
 
                         final AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
 
 
-                        alertDialog.setMessage("Would you like to delete or rename this folder?");
-
-
+                        alertDialog.setMessage("Would you like to delete or rename " + myDataset[myPos] +"?");
 
 
                         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Delete", new DialogInterface.OnClickListener() {

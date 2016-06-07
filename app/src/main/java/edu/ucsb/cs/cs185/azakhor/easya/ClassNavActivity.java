@@ -122,7 +122,7 @@ public class ClassNavActivity extends AppCompatActivity
                        final AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
 
 
-                        alertDialog.setMessage("Are you sure you want to delete or rename this folder?");
+                        alertDialog.setMessage("Are you sure you want to delete or rename " + myDataset[myPos] +  "?");
 
 
 

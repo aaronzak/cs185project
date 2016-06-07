@@ -11,8 +11,8 @@
         android:id="@+id/quarterText"
         android:textSize="20sp"
         android:layout_alignTop="@+id/quarterSpinner"
-        android:layout_alignRight="@+id/classText"
-        android:layout_alignEnd="@+id/classText" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
         android:layout_below="@+id/imageTitle"
         android:layout_toRightOf="@+id/quarterText"
         android:layout_toEndOf="@+id/quarterText"
-        android:paddingBottom="8dp" />
+        android:layout_marginBottom="24dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -60,5 +60,5 @@
         android:layout_toRightOf="@+id/textView2"
         android:layout_toEndOf="@+id/textView2"
         android:inputType="textCapWords"
-        android:paddingBottom="8dp" />
+        android:layout_marginBottom="24dp" />
 </RelativeLayout>

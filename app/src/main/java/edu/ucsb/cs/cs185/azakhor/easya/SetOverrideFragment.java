@@ -4,18 +4,14 @@ package edu.ucsb.cs.cs185.azakhor.easya;
  * Created by AaronZak on 6/5/16.
  */
 
+import android.app.AlertDialog;
 import android.app.Dialog;
-
-
-        import android.app.AlertDialog;
-        import android.app.Dialog;
-        import android.app.DialogFragment;
-        import android.content.DialogInterface;
-        import android.os.Bundle;
-        import android.util.Log;
-        import android.view.View;
-        import android.widget.EditText;
-        import android.widget.TextView;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * Created by RICK on 6/5/2016.
@@ -43,7 +39,7 @@ public class SetOverrideFragment extends DialogFragment {
         TextView overrideText = (TextView) contentView.findViewById(R.id.override_message);
         final EditText title = (EditText) getActivity().findViewById(R.id.title_editor);
         final String filename = title.getText().toString();
-        overrideText.setText("File "+filename+" already exists. Do you want to override it?");
+        overrideText.setText("File "+filename+" already exists. Do you want to overwrite it?");
 
         //Pass data to builder
         builder.setView(contentView).setPositiveButton("Yes", new DialogInterface.OnClickListener() {

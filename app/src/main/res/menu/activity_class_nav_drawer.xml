@@ -7,23 +7,39 @@
         <item
             android:id="@+id/addNewClass"
             android:orderInCategory="100"
-            android:title="Add New Class"
+            android:title="Add New Course"
+            android:icon="@drawable/ic_create_new_folder_black_24dp"
             />
 
     </group>
 
+    <item android:title="SORT">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_sort_by_alpha_black_24dp"
+                android:title="Alphabetical"
+                />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_date_range_black_24dp"
+                android:title="Date Created" />
+        </menu>
+    </item>
 
 
-    <item android:title="View">
+    <item android:title="VIEW">
 
         <menu>
             <item
                 android:orderInCategory="100"
                 android:title="Grid"
+                android:icon="@drawable/ic_view_module_black_24dp"
                 />
             <item
                 android:orderInCategory="100"
                 android:title="List"
+                android:icon="@drawable/ic_list_black_24dp"
                 />
         </menu>
     </item>
